@@ -45,7 +45,7 @@ class FileCatcher(object):
         pass
 
     def searchObjects(self,
-                      obj_name: str,
+                      obj_name: list,
                       obj_type: ObjectTypes,
                       depth: int = 0,
                       search_strategy: SearchStrategy = SearchStrategy.Strict,
@@ -54,7 +54,7 @@ class FileCatcher(object):
         searchObjects can search items as expect and store result in the `lastSearchResult`.
         
         paramters:
-            obj_name : the string given to match file/folder name.
+            obj_name : the string list given to match file/folder name.
             obj_type : decleare the item type.
             depth : how deep should search, if 0, file inn sub-folder will not be searced.
             search_strategy : how to match file name.
@@ -73,26 +73,29 @@ class FileCatcher(object):
 
         """
         fileList: list = []
-        for item in self.__last_search_result:
-            fullFileList = self.__getFileList(item, depth)
-            for item in fullFileList:
-                if obj_type is self.ObjectTypes.File and not os.path.isfile(item):
-                    continue
-                elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item):
-                    continue
-                if ignore_case:
-                    item = item.lower()
-                    obj_name = obj_name.lower()
-                if search_strategy is self.SearchStrategy.EndWith and not item.endswith(obj_name):
-                    continue
-                elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item).startswith(obj_name):
-                    continue
-                elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item) == obj_name:
-                    continue
-                elif search_strategy is self.SearchStrategy.Contain and obj_name not in os.path.basename(item):
-                    continue
-                fileList.append(item)
-            self.__last_search_result = fileList
+        for target in obj_name:
+            if not isinstance(target, str):
+                raise Exception('Given obj_name is not a list of string:\nGot {0}'.format(target))
+            for item in self.__last_search_result:
+                fullFileList = self.__getFileList(item, depth)
+                for item in fullFileList:
+                    if obj_type is self.ObjectTypes.File and not os.path.isfile(item):
+                        continue
+                    elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item):
+                        continue
+                    if ignore_case:
+                        item = item.lower()
+                        target = target.lower()
+                    if search_strategy is self.SearchStrategy.EndWith and not item.endswith(target):
+                        continue
+                    elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item).startswith(target):
+                        continue
+                    elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item) == target:
+                        continue
+                    elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item):
+                        continue
+                    fileList.append(item)
+        self.__last_search_result = fileList
         return self
 
     def __getFileList(self, root, depth):
