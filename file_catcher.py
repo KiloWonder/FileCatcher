@@ -42,7 +42,6 @@ class FileCatcher(object):
     def __del__(self):
         __last_search_result = []
         __root_dir = ''
-        pass
 
     def searchObjects(self,
                       obj_name: list,
