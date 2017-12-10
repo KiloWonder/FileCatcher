@@ -128,35 +128,3 @@ class FileCatcher(object):
 
     def reset(self, value):
         self.__last_search_result = self.__root_dir
-
-
-def handleFile(item: str):
-    if os.access(item, os.F_OK) and os.access(item, os.R_OK) and os.access(item, os.W_OK):
-        file = open(item, 'r+')
-        try:
-            lines = file.readlines()
-            keyLine: int = -1
-            valueLine: int = -1
-            for index in range(len(lines)):
-                # for line in lines:
-                line = lines[index]
-                if line.startswith('[http]'):
-                    keyLine = index
-                elif line.endswith('proxy = 127.0.0.1:50255') and keyLine >= 0:
-                    valueLine = index
-                    break
-            if keyLine == -1:
-                file.writelines(
-                    ['\n[http]', '\n    proxy = 127.0.0.1:50255'])
-                print('{0} has been changed'.format(item))
-            elif valueLine == -1:
-                file.close()
-                file = open(item, 'w')
-                lines.insert(keyLine + 1, '    proxy = 127.0.0.1:50255\n')
-                file.writelines(lines)
-                print('{0} has been changed'.format(item))
-        except Exception as ex:
-            print(
-                'Error occurs when try to read and write file `{0}`:\n\r{1}'.format(item, ex))
-        finally:
-            file.close()
