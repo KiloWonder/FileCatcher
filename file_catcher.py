@@ -123,6 +123,9 @@ class FileCatcher(object):
     
     @property
     def lastSearchResult(self):
+        """
+        All result will be saved here after each searching.
+        """
         return self.__last_search_result
 
     def reset(self):
