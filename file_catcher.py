@@ -73,28 +73,13 @@ class FileCatcher(object):
 
         """
         fileList: list = []
-        for target in obj_name:
-            if not isinstance(target, str):
-                raise Exception('Given obj_name is not a list of string:\nGot {0}'.format(target))
-            for item in self.__last_search_result:
-                fullFileList = self.__getFileList(item, depth)
-                for item in fullFileList:
-                    if obj_type is self.ObjectTypes.File and not os.path.isfile(item):
-                        continue
-                    elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item):
-                        continue
-                    if ignore_case:
-                        item = item.lower()
-                        target = target.lower()
-                    if search_strategy is self.SearchStrategy.EndWith and not item.endswith(target):
-                        continue
-                    elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item).startswith(target):
-                        continue
-                    elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item) == target:
-                        continue
-                    elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item):
-                        continue
-                    fileList.append(item)
+        targetList: list = []
+        if isinstance(obj_name, list):
+            targetList = obj_name
+        elif isinstance(obj_name, str):
+            targetList.append(obj_name)
+        for target in targetList:
+            self.__searchFileInList(target, fileList, obj_type, depth, search_strategy, ignore_case)
         self.__last_search_result = fileList
         return self
 
@@ -114,6 +99,29 @@ class FileCatcher(object):
                 rst.extend(self.__getFileList(item, depth - 1))
         return rst
 
+    def __searchFileInList(self, target, fileList, obj_type, depth, search_strategy, ignore_case):
+        if not isinstance(target, str):
+            raise Exception('Given obj_name is not a list of string:\nGot {0}'.format(target))
+        for item in self.__last_search_result:
+            fullFileList = self.__getFileList(item, depth)
+            for item in fullFileList:
+                if obj_type is self.ObjectTypes.File and not os.path.isfile(item):
+                    continue
+                elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item):
+                    continue
+                if ignore_case:
+                    item = item.lower()
+                    target = target.lower()
+                if search_strategy is self.SearchStrategy.EndWith and not item.endswith(target):
+                    continue
+                elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item).startswith(target):
+                    continue
+                elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item) == target:
+                    continue
+                elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item):
+                    continue
+                fileList.append(item)
+    
     @property
     def lastSearchResult(self):
         return self.__last_search_result
