@@ -125,5 +125,5 @@ class FileCatcher(object):
     def lastSearchResult(self):
         return self.__last_search_result
 
-    def reset(self, value):
+    def reset(self):
         self.__last_search_result = self.__root_dir
