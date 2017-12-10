@@ -17,3 +17,5 @@ and can be used as:
 
     for item in searcher.lastSearchResult:
         print(item)
+
+That will print all `.exe` files in the C:\user*\ with depth=3
