@@ -72,8 +72,6 @@ class FileCatcher(object):
                     .searchObjects(...)\
                     .searchObjects(...)\
                     ...
-
-
         """
         fileList: list = []
         targetList: list
