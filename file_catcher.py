@@ -8,12 +8,14 @@ from enum import Enum
 
 import os
 
+
 class ObjectTypes(Enum):
     """
     Search target types.
     """
     File = 0
     Folder = 1
+
 
 class SearchStrategy(Enum):
     """
@@ -23,6 +25,7 @@ class SearchStrategy(Enum):
     StartWith = 1
     EndWith = 2
     Contain = 3
+
 
 class FileCatcher(object):
     """
@@ -78,7 +81,8 @@ class FileCatcher(object):
             targetList = []
             targetList.append(obj_name)
         for target in targetList:
-            self.__searchFileInList(target, fileList, obj_type, depth, search_strategy, ignore_case)
+            self.__searchFileInList(
+                target, fileList, obj_type, depth, search_strategy, ignore_case)
         self.__last_search_result = fileList
         return self
 
