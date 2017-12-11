@@ -84,6 +84,8 @@ class FileCatcher(object):
         return self
 
     def __getFileList(self, root, depth):
+        if os.path.isfile(root):
+            return [root]
         rst: list = []
         try:
             l = os.listdir(root)
@@ -105,23 +107,23 @@ class FileCatcher(object):
                 'Given obj_name is not a list of string:\nGot {0}'.format(target))
         for item in self.__last_search_result:
             fullFileList = self.__getFileList(item, depth)
-            for item in fullFileList:
-                if obj_type is self.ObjectTypes.File and not os.path.isfile(item):
+            for item2 in fullFileList:
+                if obj_type is self.ObjectTypes.File and not os.path.isfile(item2):
                     continue
-                elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item):
+                elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item2):
                     continue
                 if ignore_case:
-                    item = item.lower()
+                    item2 = item2.lower()
                     target = target.lower()
-                if search_strategy is self.SearchStrategy.EndWith and not item.endswith(target):
+                if search_strategy is self.SearchStrategy.EndWith and not item2.endswith(target):
                     continue
-                elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item).startswith(target):
+                elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item2).startswith(target):
                     continue
-                elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item) == target:
+                elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item2) == target:
                     continue
-                elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item):
+                elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item2):
                     continue
-                fileList.append(item)
+                fileList.append(item2)
 
     @property
     def lastSearchResult(self):
