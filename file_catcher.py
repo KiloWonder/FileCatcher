@@ -72,10 +72,11 @@ class FileCatcher(object):
 
         """
         fileList: list = []
-        targetList: list = []
+        targetList: list
         if isinstance(obj_name, list):
             targetList = obj_name
         elif isinstance(obj_name, str):
+            targetList = []
             targetList.append(obj_name)
         for target in targetList:
             self.__searchFileInList(target, fileList, obj_type, depth, search_strategy, ignore_case)
@@ -100,7 +101,8 @@ class FileCatcher(object):
 
     def __searchFileInList(self, target, fileList, obj_type, depth, search_strategy, ignore_case):
         if not isinstance(target, str):
-            raise Exception('Given obj_name is not a list of string:\nGot {0}'.format(target))
+            raise Exception(
+                'Given obj_name is not a list of string:\nGot {0}'.format(target))
         for item in self.__last_search_result:
             fullFileList = self.__getFileList(item, depth)
             for item in fullFileList:
@@ -120,7 +122,7 @@ class FileCatcher(object):
                 elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item):
                     continue
                 fileList.append(item)
-    
+
     @property
     def lastSearchResult(self):
         """
