@@ -34,19 +34,21 @@ class FileCatcher(object):
 
     __root_dir: str
     __last_search_result: list = []
+    __debug: bool
 
-    def __init__(self, root_dir: str):
+    def __init__(self, root_dir: str, debug: bool = False):
         if not os.path.exists(root_dir):
             raise Exception('Given path does not exist')
         self.__root_dir = root_dir
         self.__last_search_result.append(root_dir)
+        self.__debug = debug
 
     def __del__(self):
         __last_search_result = []
         __root_dir = ''
 
     def searchObjects(self,
-                      obj_name: list,
+                      obj_name: list or str,
                       obj_type: ObjectTypes,
                       depth: int = 0,
                       search_strategy: SearchStrategy = SearchStrategy.Strict,
@@ -93,8 +95,9 @@ class FileCatcher(object):
         try:
             l = os.listdir(root)
         except Exception as ex:
-            print('Error occurs when try get items in {0}:\n========\n{1}\n========\njump to next item... \n'
-                  .format(root, ex))
+            if self.__debug:
+                print('Error occurs when try get items in {0}:\n========\n{1}\n========\njump to next item... \n'
+                    .format(root, ex))
             return []
         for item in l:
             item = os.path.join(root, item)
