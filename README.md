@@ -8,12 +8,12 @@ This a module to search folder and file.
 and can be used as:
 
     [PYTHON]
-    import file_catcher
+    from file_catcher import *
 
-    searcher = file_catcher.FileCatcher('C:\\')
+    searcher = FileCatcher('C:\\')
     searcher\
-        .searchObjects('user', searcher.ObjectTypes.Folder, 0, searcher.SearchStrategy.StartWith, True)\
-        .searchObjects('.exe', searcher.ObjectTypes.File, 3, searcher.SearchStrategy.EndWith)
+        .searchObjects('user', ObjectTypes.Folder, 0, SearchStrategy.StartWith, True)\
+        .searchObjects('.exe', ObjectTypes.File, 3, SearchStrategy.EndWith)
 
     for item in searcher.lastSearchResult:
         print(item)
