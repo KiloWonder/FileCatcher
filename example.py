@@ -1,9 +1,9 @@
-import file_catcher
+from file_catcher import *
 
-searcher = file_catcher.FileCatcher('C:\\')
+searcher = FileCatcher('C:\\')
 searcher\
-    .searchObjects(['user', 'progr'], searcher.ObjectTypes.Folder, 0, searcher.SearchStrategy.StartWith, True)\
-    .searchObjects('.exe', searcher.ObjectTypes.File, 2, searcher.SearchStrategy.EndWith)
+    .searchObjects(['user', 'progr'], ObjectTypes.Folder, 0, SearchStrategy.StartWith, True)\
+    .searchObjects('.exe', ObjectTypes.File, 2, SearchStrategy.EndWith)
 
 for item in searcher.lastSearchResult:
     print(item)

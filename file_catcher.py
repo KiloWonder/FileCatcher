@@ -8,27 +8,26 @@ from enum import Enum
 
 import os
 
+class ObjectTypes(Enum):
+    """
+    Search target types.
+    """
+    File = 0
+    Folder = 1
+
+class SearchStrategy(Enum):
+    """
+    Search match strategy.
+    """
+    Strict = 0
+    StartWith = 1
+    EndWith = 2
+    Contain = 3
 
 class FileCatcher(object):
     """
     This is a file catcher.
     """
-
-    class ObjectTypes(Enum):
-        """
-        Search target types.
-        """
-        File = 0
-        Folder = 1
-
-    class SearchStrategy(Enum):
-        """
-        Search match strategy.
-        """
-        Strict = 0
-        StartWith = 1
-        EndWith = 2
-        Contain = 3
 
     __root_dir: str
     __last_search_result: list = []
@@ -108,20 +107,20 @@ class FileCatcher(object):
         for item in self.__last_search_result:
             fullFileList = self.__getFileList(item, depth)
             for item2 in fullFileList:
-                if obj_type is self.ObjectTypes.File and not os.path.isfile(item2):
+                if obj_type is ObjectTypes.File and not os.path.isfile(item2):
                     continue
-                elif obj_type is self.ObjectTypes.Folder and not os.path.isdir(item2):
+                elif obj_type is ObjectTypes.Folder and not os.path.isdir(item2):
                     continue
                 if ignore_case:
                     item2 = item2.lower()
                     target = target.lower()
-                if search_strategy is self.SearchStrategy.EndWith and not item2.endswith(target):
+                if search_strategy is SearchStrategy.EndWith and not item2.endswith(target):
                     continue
-                elif search_strategy is self.SearchStrategy.StartWith and not os.path.basename(item2).startswith(target):
+                elif search_strategy is SearchStrategy.StartWith and not os.path.basename(item2).startswith(target):
                     continue
-                elif search_strategy is self.SearchStrategy.Strict and not os.path.basename(item2) == target:
+                elif search_strategy is SearchStrategy.Strict and not os.path.basename(item2) == target:
                     continue
-                elif search_strategy is self.SearchStrategy.Contain and target not in os.path.basename(item2):
+                elif search_strategy is SearchStrategy.Contain and target not in os.path.basename(item2):
                     continue
                 fileList.append(item2)
 
