@@ -14,6 +14,10 @@ class MatchTypes(Enum):
     Contain = 3
 
 
+def _search(area: list, item_type: ObjectTypes, depth: int):
+    pass
+
+
 class Item(object):
     pass
 
@@ -73,9 +77,6 @@ class Container(object):
     @property
     def Result(self):
         return self._searchResult
-
-    def _search(self):
-        pass
 
 
 class Searcher(object):
