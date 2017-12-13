@@ -2,8 +2,9 @@ from enum import Enum
 
 
 class ObjectTypes(Enum):
-    File = 0
-    Folder = 1
+    File = 1
+    Folder = 2
+    Mix = 3
 
 
 class MatchTypes(Enum):
@@ -17,19 +18,9 @@ class Item(object):
     pass
 
 
-class Searcher(object):
-    _debug: bool
-    _searchResult: list
-
-    def __init__(self,
-                 is_debug: bool):
-        self._debug = is_debug
-
-    def SearchIn(self,
-                 area: list,
-                 item_type: ObjectTypes,
-                 depth: int = -1):
-        pass
+class Container(object):
+    def __init__(self):
+        self._searchResult = []
 
     def And(self,
             condition: list,
@@ -79,7 +70,36 @@ class Searcher(object):
                ignore_case: bool = False):
         pass
 
-    @@property
+    @property
     def Result(self):
         return self._searchResult
 
+    def _search(self):
+        pass
+
+
+class Searcher(object):
+    _debug: bool
+
+    def __init__(self,
+                 is_debug: bool):
+        self._debug = is_debug
+        self._container = Container()
+
+    def SearchIn(self,
+                 area: list,
+                 item_type: ObjectTypes = ObjectTypes.Mix,
+                 depth: int = -1):
+        """
+        SearchIn creates a list to contains the file tree, and which will scan all the folders and files in (:param area).
+        Then another list will be created to show the search result.
+        :param area: a root folder that will be searched.
+        :param item_type: type of item in the list of result.
+        :param depth: an integer which point out how deep should searcher dig into root (:param area)
+        :return: a result container type is Container.
+        """
+        pass
+
+    @property
+    def Result(self):
+        return self._container.Result
